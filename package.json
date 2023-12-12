@@ -7,10 +7,20 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
+    "build:dev": "vue-tsc && vite build --mode development",
+    "build:prod": "vue-tsc && vite build --mode production",
+    "build:preview": "vue-tsc && vite build --mode development",
     "lint": "eslint",
-    "fix": "eslint --fix"
+    "fix": "eslint --fix",
+    "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
+    "lint:eslint": "eslint src/**/*.{ts,vue} --cache --fix",
+    "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.6.2",
+    "element-plus": "2.3.7",
     "vue": "^3.3.8"
   },
   "devDependencies": {
@@ -24,8 +34,26 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.19.2",
+    "husky": "^8.0.0",
+    "mockjs": "^1.1.0",
+    "postcss": "^8.4.32",
+    "postcss-html": "^1.5.0",
+    "postcss-scss": "^4.0.9",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "stylelint": "^16.0.2",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-recess-order": "^4.4.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
+    "stylelint-config-standard": "^35.0.0",
+    "stylelint-config-standard-scss": "^12.0.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-scss": "^6.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
+    "vite-plugin-mock": "2.9.8",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^1.8.22"
   }
 }
