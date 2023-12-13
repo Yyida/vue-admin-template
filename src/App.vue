@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { Edit } from '@element-plus/icons-vue'
-import request from '@/utils/request'
+import { userReqLogin } from '@/api/user'
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  request({
-    url: '/user/login',
-    method: 'post',
-    data: {
-      username: 'admin',
-      password: '123456',
-    },
+  // userReqLogin({
+  //   username: 'admin',
+  //   password: '123456',
+  // }).then((res) => {
+  //   console.log(res)
+  // })
+  fetchUserInfo()
+})
+
+const fetchUserInfo = () => {
+  userReqLogin({
+    username: 'admin',
+    password: '123456',
   }).then((res) => {
     console.log(res)
   })
-})
+}
 </script>
 
 <template>
