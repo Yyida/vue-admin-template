@@ -8,10 +8,16 @@ import 'virtual:svg-icons-register'
 // 导入自定义插件组件
 import GlobalComponents from '@/components'
 import App from './App.vue'
+// 导入路由
+import routes from './router'
+import pinia from './store'
+import './styles/index.scss'
 const app = createApp(App)
 app.use(ElementPlus, {
   locale, // 设置element-plus的语言包
 })
+app.use(routes)
+app.use(pinia)
 // 安装自定义插件
 app.use(GlobalComponents)
 app.mount('#app')

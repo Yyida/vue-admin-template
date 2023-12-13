@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { userLoginRequestArgType } from './type'
+import type { userLoginRequestArgType, userLoginResDataType } from './type'
 
 enum userApi {
   USER_LOGIN_API = '/user/login',
@@ -11,4 +11,5 @@ export const userReqLogin = (data: userLoginRequestArgType) =>
   request.post(userApi.USER_LOGIN_API, data)
 
 // 获取用户信息
-export const userReqInfo = () => request.get(userApi.USER_INFO_API)
+export const userReqInfo = () =>
+  request.get<any | userLoginResDataType>(userApi.USER_INFO_API)
