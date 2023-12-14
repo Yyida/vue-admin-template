@@ -6,11 +6,13 @@ import type {
   userLoginRequestArgType,
   userLoginResDataType,
 } from '@/api/user/type'
+import routes from '@/router/routes'
 
 const useUserStore = defineStore({
   id: 'user',
   state: (): userStateType => ({
     token: GET_TOKEN(),
+    routes: routes,
   }),
   getters: {
     getToken: (state) => state.token,
