@@ -3,16 +3,21 @@
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form" :model="formData">
+        <el-form
+          class="login_form"
+          :model="formData"
+          :rules="rules"
+          ref="loginFormRef"
+        >
           <h1>登录</h1>
           <h2>登录描述</h2>
-          <el-form-item>
+          <el-form-item prop="username">
             <el-input
               v-model="formData.username"
               :prefix-icon="User"
             ></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="password">
             <el-input
               v-model="formData.password"
               :prefix-icon="Lock"
@@ -25,7 +30,7 @@
               :loading="loading"
               class="login_btn"
               type="primary"
-              @click="login"
+              @click="login(loginFormRef)"
             >
               登录
             </el-button>
@@ -42,6 +47,7 @@ import { reactive, ref } from 'vue'
 import useUserStore from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 const formData = reactive({
   username: '',
   password: '',
@@ -49,36 +55,47 @@ const formData = reactive({
 let $router = useRouter()
 let userStore = useUserStore()
 let loading = ref(false)
+const loginFormRef = ref<FormInstance>()
+const rules = reactive<FormRules>({
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入秘密', trigger: 'blur' }],
+})
 
-const login = () => {
-  loading.value = true
-  userStore
-    .userLogin(formData)
-    .then((res) => {
-      console.log(res)
+const login = (formEl: FormInstance | undefined) => {
+  console.log(formEl)
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      loading.value = true
+      userStore
+        .userLogin(formData)
+        .then((res) => {
+          console.log(res)
 
-      if (res.code === 200) {
-        $router.push('/')
-        ElNotification({
-          type: 'success',
-          message: '登录成功',
+          if (res.code === 200) {
+            $router.push('/')
+            ElNotification({
+              type: 'success',
+              message: '登录成功',
+            })
+          } else {
+            ElNotification({
+              type: 'error',
+              message: res.data.message,
+            })
+          }
         })
-      } else {
-        ElNotification({
-          type: 'error',
-          message: res.message,
+        .catch(() => {
+          ElNotification({
+            type: 'error',
+            message: '登录失败',
+          })
         })
-      }
-    })
-    .catch(() => {
-      ElNotification({
-        type: 'error',
-        message: '登录失败',
-      })
-    })
-    .finally(() => {
-      loading.value = false
-    })
+        .finally(() => {
+          loading.value = false
+        })
+    }
+  })
 }
 </script>
 
