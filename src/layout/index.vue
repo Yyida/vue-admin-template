@@ -9,7 +9,9 @@
       </el-scrollbar>
     </div>
     <div class="layout_nav"></div>
-    <div class="layout_main">123</div>
+    <div class="layout_main">
+      <Main></Main>
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,7 @@
 import Logo from './components/Logo/index.vue'
 import Menu from './components/Menu/index.vue'
 import useUserStore from '@/store/modules/user'
+import Main from './components/Main/index.vue'
 const userStore = useUserStore()
 const menus = userStore.routes
 </script>

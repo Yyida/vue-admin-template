@@ -1,14 +1,25 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 defineProps(['menuList'])
+const $router = useRouter()
+const onClickRoute = (vc: any) => {
+  if (vc.index) {
+    $router.push(vc.index)
+  }
+}
 </script>
 <template>
   <template v-for="item in menuList" :key="item.path">
     <!-- 没有子路由 -->
     <template v-if="!item.children">
-      <el-menu-item v-if="!item.meta.hidden" :index="item.path">
-        <!-- <el-icon>
+      <el-menu-item
+        v-if="!item.meta.hidden"
+        :index="item.path"
+        @click="onClickRoute"
+      >
+        <el-icon>
           <component :is="item.meta.icon"></component>
-        </el-icon> -->
+        </el-icon>
         <template #title>
           <span>{{ item.meta.title }}</span>
         </template>
@@ -21,17 +32,18 @@ defineProps(['menuList'])
       <el-menu-item
         v-if="!item.children[0].meta.hidden"
         :index="item.children[0].path"
+        @click="onClickRoute"
       >
-        <!-- <el-icon>
+        <el-icon>
           <component :is="item.children[0].meta.icon"></component>
-        </el-icon> -->
+        </el-icon>
         <template #title>
           <span>{{ item.children[0].meta.title }}</span>
         </template>
       </el-menu-item>
     </template>
     <!-- 有子路由但只有一个 --not home -->
-    <template v-if="item.children && item.children.length === 1">
+    <!-- <template v-if="item.children && item.children.length === 1">
       <el-sub-menu :index="item.path">
         <template #title>
           <el-icon>
@@ -44,24 +56,24 @@ defineProps(['menuList'])
           v-if="!item.children[0].meta.hidden"
           :index="item.children[0].path"
         >
-          <!-- <el-icon>
+          <el-icon>
             <component :is="item.children[0].meta.icon"></component>
-          </el-icon> -->
+          </el-icon>
           <template #title>
             <span>{{ item.children[0].meta.title }}</span>
           </template>
         </el-menu-item>
       </el-sub-menu>
-    </template>
+    </template> -->
     <!-- 有子路由且大于一个 -->
     <el-sub-menu
       v-if="item.children && item.children.length > 1"
       :index="item.path"
     >
       <template #title>
-        <!-- <el-icon>
+        <el-icon>
           <component :is="item.meta.icon"></component>
-        </el-icon> -->
+        </el-icon>
         <span>{{ item.meta.title }}</span>
       </template>
       <Menu :menuList="item.children"></Menu>

@@ -6,45 +6,83 @@ export const constantRoutes = [
     meta: {
       title: '登录',
       hidden: true,
+      icon: 'Promotion',
     },
     component: () => import('@/views/login/index.vue'),
   },
   {
     // 首页
     path: '/',
-    name: 'Home',
+    name: 'Layout',
     meta: {
       title: '首页',
       hidden: false,
-    },
-    component: () => import('@/layout/index.vue'),
-  },
-  {
-    path: '/layout',
-    name: 'Layout',
-    meta: {
-      title: 'Layout',
-      hidden: false,
+      icon: 'Promotion',
     },
     component: () => import('@/layout/index.vue'),
     children: [
       {
-        path: '/',
-        name: 'Home',
+        // 首页
+        path: '/home',
+        name: 'Index',
         meta: {
-          title: 'Layout',
+          title: '首页',
           hidden: false,
+          icon: 'Promotion',
         },
-        component: () => import('@/layout/index.vue'),
+        component: () => import('@/views/home/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/screen',
+    name: 'Screen',
+    meta: {
+      title: '数据大屏',
+      hidden: false,
+      icon: 'Promotion',
+    },
+    components: import('@/views/screen/index.vue'),
+  },
+  {
+    path: '/acl',
+    name: 'Acl',
+    meta: {
+      title: '权限管理',
+      hidden: false,
+      icon: 'Lock',
+    },
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: '/acl/user',
+        name: 'User',
+        meta: {
+          title: '用户管理',
+          hidden: false,
+          icon: 'Lock',
+        },
+        component: () => import('@/views/acl/user/index.vue'),
       },
       {
-        path: '/asd',
-        name: 'Home1',
+        path: '/acl/role',
+        name: 'Role',
         meta: {
-          title: 'Layout1',
+          title: '角色管理',
           hidden: false,
+          icon: 'Lock',
         },
-        component: () => import('@/layout/index.vue'),
+        component: () => import('@/views/acl/role/index.vue'),
+      },
+      {
+        path: '/acl/permission',
+        name: 'Permission',
+        meta: {
+          title: '菜单管理',
+          hidden: false,
+          icon: 'Lock',
+        },
+        component: () => import('@/views/acl/permission/index.vue'),
       },
     ],
   },
@@ -54,7 +92,8 @@ export const constantRoutes = [
     name: '404',
     meta: {
       title: '404',
-      hidden: false,
+      hidden: true,
+      icon: 'Promotion',
     },
     component: () => import('@/views/error/404.vue'),
   },
@@ -65,7 +104,8 @@ export const constantRoutes = [
     name: 'Any',
     meta: {
       title: '任意路由',
-      hidden: false,
+      hidden: true,
+      icon: 'Promotion',
     },
   },
 ]
