@@ -1,15 +1,24 @@
 <template>
   <div class="layout_container">
-    <div class="layout_aside">
+    <div class="layout_aside" :class="settingStore.fixedHeader ? 'fixed' : ''">
       <Logo></Logo>
       <el-scrollbar class="scrollbar_container">
-        <el-menu background-color="#001529" text-color="#959ea6">
+        <el-menu
+          style="border-right: none"
+          :default-active="$router.path"
+          background-color="#001529"
+          text-color="#959ea6"
+          unique-opened
+          :collapse="settingStore.fixedHeader"
+        >
           <Menu :menuList="menus"></Menu>
         </el-menu>
       </el-scrollbar>
     </div>
-    <div class="layout_nav"></div>
-    <div class="layout_main">
+    <div class="layout_nav" :class="settingStore.fixedHeader ? 'fixed' : ''">
+      <Navbar></Navbar>
+    </div>
+    <div class="layout_main" :class="settingStore.fixedHeader ? 'fixed' : ''">
       <Main></Main>
     </div>
   </div>
@@ -18,9 +27,15 @@
 <script setup lang="ts">
 import Logo from './components/Logo/index.vue'
 import Menu from './components/Menu/index.vue'
-import useUserStore from '@/store/modules/user'
 import Main from './components/Main/index.vue'
+import Navbar from './components/Navbar/index.vue'
+import useUserStore from '@/store/modules/user'
+import useSetting from '@/store/modules/setting'
+import { useRoute } from 'vue-router'
 const userStore = useUserStore()
+const settingStore = useSetting()
+const $router = useRoute()
+console.log($router)
 const menus = userStore.routes
 </script>
 
@@ -35,9 +50,16 @@ const menus = userStore.routes
     top: 0;
     width: $base_menu_width;
     background: $base_menu_bg;
+    transition: all 0.3s;
     .scrollbar_container {
       width: 100%;
       color: #fff;
+    }
+    .scrollbar_container::-webkit-scrollbar {
+      width: 10px; /* 滚动条宽度 */
+    }
+    &.fixed {
+      width: $base_menu_min_width;
     }
   }
   .layout_nav {
@@ -46,7 +68,11 @@ const menus = userStore.routes
     left: $base_menu_width;
     width: calc(100% - $base_menu_width);
     height: $base_nav-height;
-    background: #00f;
+    transition: all 0.3s;
+    &.fixed {
+      left: $base_menu_min_width;
+      width: calc(100% - $base_menu_min_width);
+    }
   }
   .layout_main {
     position: absolute;
@@ -57,6 +83,11 @@ const menus = userStore.routes
     background: #0f0;
     overflow: auto;
     padding: 20px;
+    transition: all 0.3s;
+    &.fixed {
+      left: $base_menu_min_width;
+      width: calc(100% - $base_menu_min_width);
+    }
   }
 }
 </style>
