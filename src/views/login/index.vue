@@ -49,8 +49,8 @@ import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 const formData = reactive({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: '123456',
 })
 let $router = useRouter()
 let userStore = useUserStore()

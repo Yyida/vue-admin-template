@@ -1,12 +1,9 @@
 <template>
   <div class="setting_container">
-    <el-button icon="Refresh" circle />
-    <el-button icon="FullScreen" circle />
+    <el-button icon="Refresh" circle @click="refresh" />
+    <el-button icon="FullScreen" circle @click="fullScreen" />
     <el-button icon="Setting" circle />
-    <img
-      style="width: 30px; height: 30px; margin: 0 10px"
-      src="../../../../../assets/images/logo.jpg"
-    />
+    <img style="width: 30px; height: 30px; margin: 0 10px" :src="avatar" />
     <el-dropdown>
       <span class="el-dropdown-link">
         Admin
@@ -23,7 +20,29 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import useUserStore from '@/store/modules/user'
+import useSettingStore from '@/store/modules/setting'
+let settingStore = useSettingStore()
+let userStore = useUserStore()
+const avatar = ref('')
+
+const refresh = () => {
+  settingStore.refresh = !settingStore.refresh
+}
+const fullScreen = () => {
+  let isFull = document.fullscreenElement
+  if (!isFull) {
+    document.documentElement.requestFullscreen()
+  } else {
+    document.exitFullscreen()
+  }
+}
+onMounted(() => {
+  avatar.value = userStore.avatar
+})
+</script>
 
 <style scoped lang="scss">
 .setting_container {

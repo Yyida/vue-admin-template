@@ -18,6 +18,7 @@ export interface userLoginResDataType {
 }
 
 // 获取用户信息接口参数类型定义
-export interface userInfoRequestArgType {
-  token: string
+export interface userInfoResType {
+  code?: string
+  data: dataType
 }

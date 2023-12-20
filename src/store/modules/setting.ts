@@ -5,6 +5,7 @@ const useSettingStore = defineStore('setting', {
     theme: 'light',
     layout: 'side',
     fixedHeader: false,
+    refresh: false, // 用于navbar的刷新
   }),
 })
 
