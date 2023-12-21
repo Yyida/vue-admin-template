@@ -5,7 +5,7 @@
       style="width: 30px; height: 30px"
       src="../../../assets/images/logo.jpg"
     />
-    <span style="color: #fff">后台模板管理系统</span>
+    <span style="color: #fff; white-space: nowrap">后台模板管理系统</span>
   </div>
 </template>
 

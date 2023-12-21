@@ -13,7 +13,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -22,10 +22,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import useSettingStore from '@/store/modules/setting'
 let settingStore = useSettingStore()
 let userStore = useUserStore()
+const $router = useRouter()
+const $route = useRoute()
 const avatar = ref('')
 
 const refresh = () => {
@@ -37,6 +40,19 @@ const fullScreen = () => {
     document.documentElement.requestFullscreen()
   } else {
     document.exitFullscreen()
+  }
+}
+const logout = async () => {
+  const result = await userStore.logout()
+  if (result) {
+    console.log($route)
+    const { path } = $route
+    $router.push({
+      path: '/login',
+      query: {
+        redirect: path,
+      },
+    })
   }
 }
 onMounted(() => {

@@ -9,6 +9,7 @@ export interface userLoginRequestArgType {
 export interface dataType {
   token?: string
   message?: string
+  checkUser?: any
 }
 
 // 定义接口返回数据类型
@@ -19,6 +20,6 @@ export interface userLoginResDataType {
 
 // 获取用户信息接口参数类型定义
 export interface userInfoResType {
-  code?: string
+  code?: number | string
   data: dataType
 }

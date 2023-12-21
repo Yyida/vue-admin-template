@@ -45,7 +45,7 @@
 import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import useUserStore from '@/store/modules/user'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 const formData = reactive({
@@ -53,6 +53,7 @@ const formData = reactive({
   password: '123456',
 })
 let $router = useRouter()
+let $route = useRoute()
 let userStore = useUserStore()
 let loading = ref(false)
 const loginFormRef = ref<FormInstance>()
@@ -62,7 +63,6 @@ const rules = reactive<FormRules>({
 })
 
 const login = (formEl: FormInstance | undefined) => {
-  console.log(formEl)
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
@@ -70,10 +70,11 @@ const login = (formEl: FormInstance | undefined) => {
       userStore
         .userLogin(formData)
         .then((res) => {
-          console.log(res)
-
           if (res.code === 200) {
-            $router.push('/')
+            const { query }: any = $route
+            $router.push({
+              path: query.redirect || '/',
+            })
             ElNotification({
               type: 'success',
               message: '登录成功',

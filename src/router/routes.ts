@@ -14,6 +14,7 @@ export const constantRoutes = [
     // 首页
     path: '/',
     name: 'Layout',
+    redirect: '/home',
     meta: {
       title: '首页',
       hidden: false,

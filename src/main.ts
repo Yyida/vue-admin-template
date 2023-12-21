@@ -12,6 +12,7 @@ import App from './App.vue'
 import routes from './router'
 import pinia from './store'
 import './styles/index.scss'
+import '../premission'
 const app = createApp(App)
 app.use(ElementPlus, {
   locale, // 设置element-plus的语言包
