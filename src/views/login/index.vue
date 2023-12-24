@@ -50,7 +50,7 @@ import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 const formData = reactive({
   username: 'admin',
-  password: '123456',
+  password: 'atguigu123',
 })
 let $router = useRouter()
 let $route = useRoute()

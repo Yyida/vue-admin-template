@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import { userReqLogin, userReqInfo } from '@/api/user'
+import { userReqLogin, userReqInfo, userReqLogout } from '@/api/user'
+import type {
+  loginFormData,
+  loginResData,
+  userInfoResponseData,
+} from '@/api/user/type'
 import type { userStateType } from './types'
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/localStorage'
-import type {
-  userLoginRequestArgType,
-  userLoginResDataType,
-  userInfoResType,
-} from '@/api/user/type'
 import routes from '@/router/routes'
 const useUserStore = defineStore({
   id: 'user',
@@ -20,16 +20,16 @@ const useUserStore = defineStore({
     getToken: (state) => state.token,
   },
   actions: {
-    userLogin({ username, password }: userLoginRequestArgType) {
-      return new Promise<userLoginResDataType>((resolve, rejcet) => {
+    userLogin({ username, password }: loginFormData) {
+      return new Promise<any>((resolve, rejcet) => {
         userReqLogin({
           username,
           password,
         })
-          .then((result) => {
+          .then((result: loginResData) => {
             console.log(result)
-            if (result) {
-              SET_TOKEN(result.data.token)
+            if (result.code === 200) {
+              SET_TOKEN(result.data)
               resolve(result)
             }
           })
@@ -39,15 +39,14 @@ const useUserStore = defineStore({
       })
     },
     userInfo() {
-      return new Promise<userInfoResType | any>((resolve, rejcet) => {
+      return new Promise<any>((resolve, rejcet) => {
         userReqInfo()
-          .then((result: any) => {
+          .then((result: userInfoResponseData) => {
             if (result.code === 200) {
+              console.log(result)
               console.log('userInfo 200 ', 200)
-              this.username = result.data.checkUser.username
-              this.avatar = result.data.checkUser.avatar
-              console.log(this.username)
-              console.log(this.avatar)
+              this.username = result.data.name
+              this.avatar = result.data.avatar
               resolve(result)
             } else {
               resolve(result)
@@ -60,11 +59,16 @@ const useUserStore = defineStore({
     },
     logout() {
       return new Promise<any>((resolve) => {
-        this.token = ''
-        this.username = ''
-        this.avatar = ''
-        REMOVE_TOKEN()
-        resolve(true)
+        userReqLogout().then((result: any) => {
+          console.log(result)
+          if (result.code === 200) {
+            this.token = ''
+            this.username = ''
+            this.avatar = ''
+            REMOVE_TOKEN()
+            resolve(true)
+          }
+        })
       })
     },
   },

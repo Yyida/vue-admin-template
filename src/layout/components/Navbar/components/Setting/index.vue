@@ -44,6 +44,7 @@ const fullScreen = () => {
 }
 const logout = async () => {
   const result = await userStore.logout()
+  console.log(result)
   if (result) {
     console.log($route)
     const { path } = $route

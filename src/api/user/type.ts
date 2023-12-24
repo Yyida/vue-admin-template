@@ -1,25 +1,26 @@
-// 定义接口参数类型
-// 用户登录接口参数类型定义
-export interface userLoginRequestArgType {
+// 用户信息接口的类型定义
+
+export interface ResponseData {
+  code: number
+  message: string
+  ok: boolean
+}
+
+export interface loginFormData {
   username: string
   password: string
 }
 
-// 定义接口返回数据类型
-export interface dataType {
-  token?: string
-  message?: string
-  checkUser?: any
+export interface loginResData extends ResponseData {
+  data: string
 }
 
-// 定义接口返回数据类型
-export interface userLoginResDataType {
-  code?: number
-  data: dataType
-}
-
-// 获取用户信息接口参数类型定义
-export interface userInfoResType {
-  code?: number | string
-  data: dataType
+export interface userInfoResponseData extends ResponseData {
+  data: {
+    routes: string[]
+    roles: string[]
+    buttons: string[]
+    name: string
+    avatar: string
+  }
 }
