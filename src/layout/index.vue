@@ -80,7 +80,6 @@ const menus = userStore.routes
     left: $base_menu_width;
     width: calc(100% - $base_menu_width);
     height: calc(100vh - $base_nav-height);
-    background: #0f0;
     overflow: auto;
     padding: 20px;
     transition: all 0.3s;

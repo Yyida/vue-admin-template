@@ -26,9 +26,7 @@ const onClickRoute = (vc: any) => {
       </el-menu-item>
     </template>
     <!-- 有子路由但只有一个 --home -->
-    <template
-      v-if="item.children && item.children.length === 1 && item.path === '/'"
-    >
+    <template v-if="item.children && item.children.length === 1">
       <el-menu-item
         v-if="!item.children[0].meta.hidden"
         :index="item.children[0].path"

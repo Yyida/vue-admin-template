@@ -43,7 +43,7 @@ export const constantRoutes = [
       hidden: false,
       icon: 'Promotion',
     },
-    components: import('@/views/screen/index.vue'),
+    component: () => import('@/views/screen/index.vue'),
   },
   {
     path: '/acl',
@@ -84,6 +84,27 @@ export const constantRoutes = [
           icon: 'Lock',
         },
         component: () => import('@/views/acl/permission/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/product',
+    redirect: '/product/trademark',
+    meta: {
+      title: '商品管理',
+      hidden: false,
+      icon: 'Promotion',
+    },
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: '/product/trademark',
+        meta: {
+          title: '品牌管理',
+          icon: 'Promotion',
+          hidden: false,
+        },
+        component: () => import('@/views/product/trademark/index.vue'),
       },
     ],
   },

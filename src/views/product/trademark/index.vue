@@ -1,0 +1,134 @@
+<!-- eslint-disable vue/valid-attribute-name -->
+<template>
+  <div class="product_container">
+    <el-card class="box-card">
+      <el-button type="primary" icon="Plus" @click="add">添加品牌</el-button>
+      <el-table v-loading="loading" style="margin: 22px 0" :data="list">
+        <el-table-column
+          label="序号"
+          width="80"
+          align="center"
+          type="index"
+        ></el-table-column>
+        <el-table-column label="品牌名称" prop="tmName"></el-table-column>
+        <el-table-column label="LOGO">
+          <template #default="{ row }">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="row.logoUrl"
+              fit="cover"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button
+              type="primary"
+              text
+              size="small"
+              icon="Edit"
+              @click="edit(row)"
+            >
+              编辑
+            </el-button>
+            <el-button
+              text
+              type="danger"
+              size="small"
+              icon="Delete"
+              @click="del(row)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 
+        v-model:current-page  当前页码
+        v-model:page-size 每页显示的条数
+        :page-sizes  可选的每页显示条数
+       -->
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[3, 5, 7, 9]"
+        :small="true"
+        :background="true"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @current-change="getData"
+        @size-change="sizeChange"
+      />
+    </el-card>
+    <TrademarkDialog
+      :dialogVisible="dialogVisible"
+      :dialogTitle="dialogTitle"
+      @closeDialog="closeDialog"
+    ></TrademarkDialog>
+  </div>
+</template>
+
+<script setup lang="ts">
+import TrademarkDialog from './components/TrademarkDialog/index.vue'
+import { ref, onMounted } from 'vue'
+import { getTrademarkList } from '@/api/product/trademark.ts'
+import type {
+  trademarkResData,
+  trademarkFormData,
+  Records,
+} from '@/api/product/type.ts'
+const currentPage = ref<number>(1)
+const pageSize = ref<number>(3)
+let list = ref<Records>()
+let total = ref<number>(0)
+let loading = ref<boolean>(false)
+
+let dialogTitle = ref<string>('')
+let dialogVisible = ref<boolean>(false)
+
+const getData = async () => {
+  loading.value = true
+  try {
+    const params: trademarkFormData = {
+      page: currentPage.value,
+      limit: pageSize.value,
+    }
+    const result: trademarkResData = await getTrademarkList(params)
+    const { code, data } = result
+    if (code === 200) {
+      list.value = data.records
+      total.value = data.total
+      loading.value = false
+    }
+  } catch (error) {
+    console.log(error)
+    loading.value = false
+  }
+}
+
+const add = () => {
+  dialogVisible.value = true
+  dialogTitle.value = '添加品牌'
+}
+const closeDialog = () => {
+  dialogVisible.value = false
+}
+const edit = (row: any) => {
+  console.log(row)
+}
+
+const del = (row: any) => {
+  console.log(row)
+}
+
+const sizeChange = () => {
+  currentPage.value = 1
+  getData()
+}
+
+onMounted(() => {
+  getData()
+})
+</script>
+
+<style scoped></style>
