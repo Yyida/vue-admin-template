@@ -63,15 +63,19 @@
     <TrademarkDialog
       :dialogVisible="dialogVisible"
       :dialogTitle="dialogTitle"
+      :dialogType="dialogType"
+      :formData="formData"
       @closeDialog="closeDialog"
+      @confirm="getData"
     ></TrademarkDialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import TrademarkDialog from './components/TrademarkDialog/index.vue'
-import { ref, onMounted } from 'vue'
-import { getTrademarkList } from '@/api/product/trademark.ts'
+import { ref, onMounted, reactive, nextTick } from 'vue'
+import { getTrademarkList, deleteTrademark } from '@/api/product/trademark.ts'
+import { ElMessage } from 'element-plus'
 import type {
   trademarkResData,
   trademarkFormData,
@@ -83,8 +87,22 @@ let list = ref<Records>()
 let total = ref<number>(0)
 let loading = ref<boolean>(false)
 
-let dialogTitle = ref<string>('')
+interface formDataInterface {
+  tmName: string
+  logoUrl: string
+  id?: number | string | null
+}
+
+let dialogTitle = ref<string>()
 let dialogVisible = ref<boolean>(false)
+let dialogType = ref<string>('add')
+let formData = reactive<formDataInterface>({
+  id: undefined,
+  tmName: '',
+  logoUrl: '',
+})
+
+let delLoad = ref<boolean>(false)
 
 const getData = async () => {
   loading.value = true
@@ -99,6 +117,10 @@ const getData = async () => {
       list.value = data.records
       total.value = data.total
       loading.value = false
+      if (!data.records) {
+        currentPage.value = currentPage.value - 1
+        getData()
+      }
     }
   } catch (error) {
     console.log(error)
@@ -107,18 +129,55 @@ const getData = async () => {
 }
 
 const add = () => {
-  dialogVisible.value = true
-  dialogTitle.value = '添加品牌'
+  nextTick(() => {
+    dialogType.value = `add`
+    dialogTitle.value = '添加品牌'
+    console.log(dialogTitle)
+    dialogVisible.value = true
+  })
 }
 const closeDialog = () => {
+  console.log('close')
   dialogVisible.value = false
+  formData = {
+    id: '',
+    tmName: '',
+    logoUrl: '',
+  }
 }
 const edit = (row: any) => {
-  console.log(row)
+  nextTick(() => {
+    console.log(row)
+    formData = row
+    dialogVisible.value = true
+    dialogType.value = `edit`
+    dialogTitle.value = '编辑品牌'
+  })
 }
 
-const del = (row: any) => {
+const del = async (row: any) => {
   console.log(row)
+  const { id } = row
+  if (id) {
+    delLoad.value = true
+    try {
+      let result = await deleteTrademark(id)
+      console.log(result)
+      if (result.code) {
+        ElMessage({
+          message: '删除品牌成功',
+          type: 'success',
+        })
+        getData()
+      }
+    } catch {
+      delLoad.value = false
+      ElMessage({
+        message: '删除品牌失败',
+        type: 'error',
+      })
+    }
+  }
 }
 
 const sizeChange = () => {

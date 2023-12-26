@@ -4,11 +4,14 @@ import type {
   trademarkResData,
   trademarkParams,
   ResponseData,
+  trademarkUpdateData,
 } from './type'
 
 enum Api {
   trademarkList = '/admin/product/baseTrademark/',
   addTrademark = '/admin/product/baseTrademark/save',
+  updateTrademark = '/admin/product/baseTrademark/update',
+  deleteTrademark = '/admin/product/baseTrademark/remove/',
 }
 
 // 获取品牌管理列表
@@ -21,4 +24,13 @@ export const getTrademarkList = ({ page, limit }: trademarkFormData) => {
 // 添加品牌
 export const addTrademark = (data: trademarkParams) => {
   return request.post<any, ResponseData>(Api.addTrademark, data)
+}
+
+// 更新品牌
+export const updateTrademark = (data: trademarkParams) => {
+  return request.put<any, trademarkUpdateData>(Api.updateTrademark, data)
+}
+// 删除品牌
+export const deleteTrademark = (id: number) => {
+  return request.delete<any, ResponseData>(Api.deleteTrademark + id)
 }

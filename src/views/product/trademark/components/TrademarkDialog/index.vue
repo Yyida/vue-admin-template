@@ -4,6 +4,7 @@
     :title="dialogTitle"
     @close="handleBeforeClose(formRef)"
     width="30%"
+    @open="handleOpen"
   >
     <el-form
       :model="form"
@@ -48,24 +49,24 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { defineProps, watchEffect, ref, reactive } from 'vue'
-import { addTrademark } from '@/api/product/trademark'
+import { watch, ref, reactive } from 'vue'
+import { addTrademark, updateTrademark } from '@/api/product/trademark'
 import { UploadProps } from 'element-plus/es/components/upload/src/upload'
-let emit = defineEmits(['closeDialog'])
-let props = defineProps({
-  dialogVisible: {
-    type: Boolean,
-    default: false,
-  },
-  dialogTitle: {
-    type: String,
-    default: '',
-  },
-})
-let dialogVisible = props.dialogVisible
-let dialogTitle = props.dialogTitle
+let emit = defineEmits(['closeDialog', 'confirm'])
+let props = defineProps<{
+  dialogVisible?: boolean
+  dialogTitle?: string | any
+  dialogType?: string | any
+  formData?: any
+}>()
+console.log(props)
+let dialogVisible = ref<boolean>(props.dialogVisible)
+let dialogTitle = ref<string>(props.dialogTitle)
+let dialogType = ref<string>(props.dialogType)
 const formRef = ref<FormInstance | any>()
-let form = reactive({
+let loading = ref<boolean>(false)
+let form = reactive<any>({
+  id: '',
   tmName: '',
   logoUrl: '',
 })
@@ -85,21 +86,24 @@ let rules = reactive<FormRules>({
     },
   ],
 })
-let loading = ref<boolean>(false)
 
 // 监听dialogbisible 属性变化， 用于控制隐藏、显示 dialog
-watchEffect(() => {
-  if (props.dialogVisible) {
-    dialogVisible = true
-    dialogTitle = props.dialogTitle
-  } else {
-    dialogVisible = false
-    dialogTitle = ''
-  }
-})
+watch(
+  () => props.dialogVisible,
+  (val) => {
+    if (val) {
+      dialogVisible.value = val
+      dialogTitle.value = props.dialogTitle
+      dialogType.value = props.dialogType
+      form = Object.assign(form, props.formData)
+    }
+  },
+)
 
 const handleBeforeClose = (formEl: FormInstance) => {
+  if (!formEl) return
   formEl.resetFields()
+  dialogVisible.value = false
   emit('closeDialog')
 }
 
@@ -107,30 +111,51 @@ const handleBeforeClose = (formEl: FormInstance) => {
 const handleClose = (formEl: FormInstance) => {
   if (!formEl) return
   formEl.resetFields()
+  dialogVisible.value = false
   emit('closeDialog')
 }
 
 // 保存添加品牌
 const handleSave = (formEl: FormInstance) => {
-  console.log(formEl)
+  console.log(dialogType.value)
   formEl.validate(async (valid: boolean) => {
     if (valid) {
       loading.value = true
-      try {
-        let result = await addTrademark(form)
-        console.log(result)
-        loading.value = false
-        handleClose(formEl)
-        ElMessage({
-          message: '添加品牌成功',
-          type: 'success',
-        })
-      } catch {
-        loading.value = false
-        ElMessage({
-          message: '添加品牌失败',
-          type: 'error',
-        })
+      if (dialogType.value === 'add') {
+        try {
+          let result = await addTrademark(form)
+          console.log(result)
+          loading.value = false
+          handleClose(formEl)
+          ElMessage({
+            message: '添加品牌成功',
+            type: 'success',
+          })
+          emit('confirm')
+        } catch {
+          loading.value = false
+          ElMessage({
+            message: '添加品牌失败',
+            type: 'error',
+          })
+        }
+      } else {
+        try {
+          let result = await updateTrademark(form)
+          console.log(result)
+          loading.value = false
+          handleClose(formEl)
+          ElMessage({
+            message: '修改品牌成功',
+            type: 'success',
+          })
+          emit('confirm')
+        } catch {
+          loading.value = false
+          ElMessage({
+            message: '修改品牌失败',
+          })
+        }
       }
     }
   })
@@ -159,6 +184,11 @@ const handleSuccess: UploadProps['onSuccess'] = (response: any) => {
   } else {
     form.logoUrl = ''
   }
+}
+
+const handleOpen = () => {
+  console.log('打开')
+  // form = props.formData
 }
 </script>
 

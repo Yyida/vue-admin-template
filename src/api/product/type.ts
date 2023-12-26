@@ -35,3 +35,7 @@ export interface ResponseData {
   message: string
   ok: boolean
 }
+
+export interface trademarkUpdateData extends ResponseData {
+  data: any
+}
