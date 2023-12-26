@@ -36,6 +36,7 @@
               type="danger"
               size="small"
               icon="Delete"
+              :loading="delLoad"
               @click="del(row)"
             >
               删除
@@ -163,7 +164,8 @@ const del = async (row: any) => {
     try {
       let result = await deleteTrademark(id)
       console.log(result)
-      if (result.code) {
+      if (result.code === 200) {
+        delLoad.value = false
         ElMessage({
           message: '删除品牌成功',
           type: 'success',
