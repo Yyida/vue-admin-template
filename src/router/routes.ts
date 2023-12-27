@@ -90,6 +90,7 @@ export const constantRoutes = [
   {
     path: '/product',
     redirect: '/product/trademark',
+    name: 'Product',
     meta: {
       title: '商品管理',
       hidden: false,
@@ -99,12 +100,23 @@ export const constantRoutes = [
     children: [
       {
         path: '/product/trademark',
+        name: 'Trademark',
         meta: {
           title: '品牌管理',
           icon: 'Promotion',
           hidden: false,
         },
         component: () => import('@/views/product/trademark/index.vue'),
+      },
+      {
+        path: '/product/attr',
+        name: 'Attr',
+        meta: {
+          title: '属性管理',
+          icon: 'Promotion',
+          hidden: false,
+        },
+        component: () => import('@/views/product/attr/index.vue'),
       },
     ],
   },

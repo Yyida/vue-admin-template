@@ -50,7 +50,10 @@
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { watch, ref, reactive, nextTick } from 'vue'
-import { addTrademark, updateTrademark } from '@/api/product/trademark'
+import {
+  addTrademark,
+  updateTrademark,
+} from '@/api/product/trademark/trademark'
 import { UploadProps } from 'element-plus/es/components/upload/src/upload'
 let emit = defineEmits(['closeDialog', 'confirm'])
 let props = defineProps<{
@@ -223,3 +226,4 @@ const handleOpen = () => {
   text-align: center;
 }
 </style>
+@/api/product/trademark/trademark

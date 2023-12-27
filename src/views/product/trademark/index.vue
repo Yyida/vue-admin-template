@@ -75,13 +75,16 @@
 <script setup lang="ts">
 import TrademarkDialog from './components/TrademarkDialog/index.vue'
 import { ref, onMounted, reactive, nextTick } from 'vue'
-import { getTrademarkList, deleteTrademark } from '@/api/product/trademark.ts'
+import {
+  getTrademarkList,
+  deleteTrademark,
+} from '@/api/product/trademark/trademark.ts'
 import { ElMessage } from 'element-plus'
 import type {
   trademarkResData,
   trademarkFormData,
   Records,
-} from '@/api/product/type.ts'
+} from '@/api/product/trademark/type.ts'
 const currentPage = ref<number>(1)
 const pageSize = ref<number>(3)
 let list = ref<Records>()
@@ -192,3 +195,4 @@ onMounted(() => {
 </script>
 
 <style scoped></style>
+@/api/product/trademark/trademark@/api/product/trademark/type
