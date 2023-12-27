@@ -148,7 +148,6 @@ const closeDialog = () => {
 }
 const edit = (row: any) => {
   nextTick(() => {
-    console.log(row)
     formData = row
     dialogVisible.value = true
     dialogType.value = `edit`

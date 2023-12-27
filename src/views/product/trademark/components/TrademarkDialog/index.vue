@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { watch, ref, reactive } from 'vue'
+import { watch, ref, reactive, nextTick } from 'vue'
 import { addTrademark, updateTrademark } from '@/api/product/trademark'
 import { UploadProps } from 'element-plus/es/components/upload/src/upload'
 let emit = defineEmits(['closeDialog', 'confirm'])
@@ -93,9 +93,7 @@ watch(
   (val) => {
     if (val) {
       dialogVisible.value = val
-      dialogTitle.value = props.dialogTitle
-      dialogType.value = props.dialogType
-      form = Object.assign(form, props.formData)
+      // form = Object.assign(form, props.formData)
     }
   },
 )
@@ -187,8 +185,11 @@ const handleSuccess: UploadProps['onSuccess'] = (response: any) => {
 }
 
 const handleOpen = () => {
-  console.log('打开')
-  // form = props.formData
+  nextTick(() => {
+    dialogTitle.value = props.dialogTitle
+    dialogType.value = props.dialogType
+    form = Object.assign(form, props?.formData)
+  })
 }
 </script>
 
