@@ -6,6 +6,7 @@
           v-model="params.category1Id"
           placeholder="请选择一级分类"
           @change="onChangeCategory1"
+          :disabled="isDisabled"
         >
           <el-option
             v-for="item in category1List"
@@ -20,6 +21,7 @@
           v-model="params.category2Id"
           placeholder="请选择二级分类"
           @change="onChangeCategory2"
+          :disabled="isDisabled"
         >
           <el-option
             v-for="item in category2List"
@@ -31,6 +33,7 @@
       </el-form-item>
       <el-form-item label="三级分类">
         <el-select
+          :disabled="isDisabled"
           v-model="params.category3Id"
           placeholder="请选择三级分类"
           @change="onChangeCategory3"
@@ -55,7 +58,7 @@ import {
   getCategory3List,
 } from '@/api/product/attr/attr'
 import type { paramsArg, categoryResponse } from '@/api/product/attr/type'
-
+defineProps(['isDisabled'])
 let emit = defineEmits(['changeParams'])
 let params = reactive<paramsArg | any>({
   category1Id: '',
@@ -80,6 +83,7 @@ const onChangeCategory1 = async (val: paramsArg) => {
   if (val) {
     params.category1Id = val
     category2List.value = []
+    category3List.value = []
     params = Object.assign(params, { category2Id: '', category3Id: '' })
     let result: categoryResponse = await getCategory2List(val)
     console.log(result)
@@ -87,6 +91,7 @@ const onChangeCategory1 = async (val: paramsArg) => {
     if (code === 200) {
       category2List.value = data
     }
+    emit('changeParams', params)
   }
 }
 // 获取三级类型
@@ -101,6 +106,7 @@ const onChangeCategory2 = async (val: paramsArg) => {
       console.log(data)
       category3List.value = data
     }
+    emit('changeParams', params)
   }
 }
 
@@ -108,8 +114,8 @@ const onChangeCategory2 = async (val: paramsArg) => {
 const onChangeCategory3 = (val: paramsArg) => {
   if (val) {
     params.category3Id = val
-    emit('changeParams', params)
   }
+  emit('changeParams', params)
 }
 
 onMounted(() => {
