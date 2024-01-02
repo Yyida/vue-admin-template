@@ -71,8 +71,8 @@ const changeParams = async (params: any) => {
   const { category3Id } = params
   if (category3Id) {
     disabledAdd.value = false
+    loading.value = true
     try {
-      loading.value = false
       let result: categoryAllResponse = await getCategoryAll(params)
       const { code, data } = result
       if (code === 200) {
