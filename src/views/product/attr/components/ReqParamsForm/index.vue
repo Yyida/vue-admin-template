@@ -54,32 +54,34 @@ import {
   getCategory2List,
   getCategory3List,
 } from '@/api/product/attr/attr'
+import type { paramsArg, categoryResponse } from '@/api/product/attr/type'
 
 let emit = defineEmits(['changeParams'])
-let params = reactive<any>({
+let params = reactive<paramsArg | any>({
   category1Id: '',
   category2Id: '',
   category3Id: '',
 })
-let category1List = ref<any[]>([])
-let category2List = ref<any[]>([])
-let category3List = ref<any[]>([])
-// 获取一级类型
+let category1List = ref<any | categoryResponse[]>([])
+let category2List = ref<any | categoryResponse[]>([])
+let category3List = ref<any | categoryResponse[]>([])
+// 获取一级类型a
 const fetchCategory1List = async () => {
-  let result = await getCategory1List()
+  let result: categoryResponse = await getCategory1List()
   console.log(result)
   const { code, data } = result
+  console.log(data)
   if (code === 200) {
     category1List.value = data
   }
 }
 // 获取二级类型
-const onChangeCategory1 = async (val) => {
+const onChangeCategory1 = async (val: paramsArg) => {
   if (val) {
     params.category1Id = val
     category2List.value = []
     params = Object.assign(params, { category2Id: '', category3Id: '' })
-    let result = await getCategory2List(val)
+    let result: categoryResponse = await getCategory2List(val)
     console.log(result)
     const { code, data } = result
     if (code === 200) {
@@ -88,21 +90,22 @@ const onChangeCategory1 = async (val) => {
   }
 }
 // 获取三级类型
-const onChangeCategory2 = async (val) => {
+const onChangeCategory2 = async (val: paramsArg) => {
   if (val) {
     params.category2Id = val
     category3List.value = []
     params = Object.assign(params, { category3Id: '' })
-    let result = await getCategory3List(val)
+    let result: categoryResponse = await getCategory3List(val)
     const { code, data } = result
     if (code === 200) {
+      console.log(data)
       category3List.value = data
     }
   }
 }
 
 // 向外暴露三级id 方法
-const onChangeCategory3 = (val) => {
+const onChangeCategory3 = (val: paramsArg) => {
   if (val) {
     params.category3Id = val
     emit('changeParams', params)

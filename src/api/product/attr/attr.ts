@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import type { categoryResponse, categoryAllResponse, paramsArg } from './type'
 
 enum Api {
   C1_list = '/admin/product/getCategory1',
@@ -8,17 +9,17 @@ enum Api {
 }
 // 获取一级分类
 export const getCategory1List = () => {
-  return request.get(Api.C1_list)
+  return request.get<any | categoryResponse>(Api.C1_list)
 }
 
 // 获取二级分类
-export const getCategory2List = (category1Id: number) => {
-  return request.get(`${Api.C2_list}/${category1Id}`)
+export const getCategory2List = (category1Id: paramsArg) => {
+  return request.get<any | categoryResponse>(`${Api.C2_list}/${category1Id}`)
 }
 
 // 获取三级分类
-export const getCategory3List = (category2Id: number) => {
-  return request.get(`${Api.C3_list}/${category2Id}`)
+export const getCategory3List = (category2Id: paramsArg) => {
+  return request.get<any | categoryResponse>(`${Api.C3_list}/${category2Id}`)
 }
 
 // 获取三个分类下的所有数据
@@ -26,8 +27,8 @@ export const getCategoryAll = ({
   category1Id,
   category2Id,
   category3Id,
-}: any) => {
-  return request.get(
+}: paramsArg) => {
+  return request.get<any | categoryAllResponse>(
     Api.CategoryAll + `/${category1Id}/${category2Id}/${category3Id}`,
   )
 }
