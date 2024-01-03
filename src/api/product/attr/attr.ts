@@ -6,6 +6,7 @@ enum Api {
   C2_list = '/admin/product/getCategory2',
   C3_list = '/admin/product/getCategory3',
   CategoryAll = '/admin/product/attrInfoList',
+  SaveOrUpdate_AttrValue = '/admin/product/saveAttrInfo',
 }
 // 获取一级分类
 export const getCategory1List = () => {
@@ -30,5 +31,13 @@ export const getCategoryAll = ({
 }: paramsArg) => {
   return request.get<any | categoryAllResponse>(
     Api.CategoryAll + `/${category1Id}/${category2Id}/${category3Id}`,
+  )
+}
+
+// 保存或更新三级分类属性值
+export const saveOrUpdateAttrValue = (data: any) => {
+  return request.post<any | categoryAllResponse>(
+    Api.SaveOrUpdate_AttrValue,
+    data,
   )
 }

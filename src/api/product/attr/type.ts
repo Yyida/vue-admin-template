@@ -36,3 +36,20 @@ export interface categoryAllResponse extends ResponseData {
     attrValueList: attrValueList[]
   }
 }
+
+export type attrValueListType = {
+  attrId?: number | string
+  id?: number | string
+  valueName: string
+  flag: boolean
+}
+export interface attrsParamsAsgType {
+  attrName: string
+  categoryId?: number | string
+  categoryLevel: 3
+  id?: number | string
+  attrValueList: attrValueListType[]
+}
+export interface saveOrUpdateAttrValueResponse extends ResponseData {
+  data: null | any
+}
