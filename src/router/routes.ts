@@ -118,6 +118,16 @@ export const constantRoutes = [
         },
         component: () => import('@/views/product/attr/index.vue'),
       },
+      {
+        path: '/product/spu',
+        name: 'Spu',
+        meta: {
+          title: 'SPU管理',
+          icon: 'Promotion',
+          hidden: false,
+        },
+        component: () => import('@/views/product/spu/index.vue'),
+      },
     ],
   },
   {
