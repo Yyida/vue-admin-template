@@ -1,5 +1,10 @@
 import request from '@/utils/request'
-import type { categoryResponse, categoryAllResponse, paramsArg } from './type'
+import type {
+  categoryResponse,
+  categoryAllResponse,
+  paramsArg,
+  attrsParamsAsgType,
+} from './type'
 
 enum Api {
   C1_list = '/admin/product/getCategory1',
@@ -7,6 +12,7 @@ enum Api {
   C3_list = '/admin/product/getCategory3',
   CategoryAll = '/admin/product/attrInfoList',
   SaveOrUpdate_AttrValue = '/admin/product/saveAttrInfo',
+  Delete_AttrValue = '/admin/product/deleteAttr',
 }
 // 获取一级分类
 export const getCategory1List = () => {
@@ -35,9 +41,15 @@ export const getCategoryAll = ({
 }
 
 // 保存或更新三级分类属性值
-export const saveOrUpdateAttrValue = (data: any) => {
+export const saveOrUpdateAttrValue = (data: attrsParamsAsgType) => {
   return request.post<any | categoryAllResponse>(
     Api.SaveOrUpdate_AttrValue,
     data,
+  )
+}
+
+export const deleteAttrValue = (id: number | string) => {
+  return request.delete<any | categoryAllResponse>(
+    Api.Delete_AttrValue + `/${id}`,
   )
 }

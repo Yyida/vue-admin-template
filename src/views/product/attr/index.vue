@@ -20,6 +20,8 @@
           style="margin: 10px 0"
           v-loading="loading"
           ref="categoryTableRef"
+          @edit="onEdit"
+          @changeCategoryAllList="updateCategoryAllList"
         />
       </div>
       <div v-show="isShow === 1">
@@ -187,14 +189,17 @@ const onAddAttrValue = (row: attrValueListType) => {
 }
 
 const onSaveAttrValue = async () => {
-  console.log(attrsParams)
   if (attrsParams.attrName) {
-    if (attrsParams.attrValueList.length) {
+    let check = true
+    attrsParams.attrValueList.forEach((item) => {
+      if (item.valueName === '' || !item.valueName) check = false
+      return
+    })
+    if (check && attrsParams.attrValueList.length) {
       try {
         saveLoad.value = true
         const result: saveOrUpdateAttrValueResponse =
           await saveOrUpdateAttrValue(attrsParams)
-        console.log(result)
         const { code } = result
         if (code === 200) {
           ElMessage({
@@ -261,6 +266,23 @@ const onToEdit = (row: attrValueListType, index: number) => {
 
 const onDeleteAttrValue = (index: number) => {
   attrsParams.attrValueList.splice(index, 1)
+}
+
+const onEdit = (row: attrsParamsAsgType) => {
+  if (row) {
+    isShow.value = 1
+    disabledAdd.value = true
+    attrsParams = Object.assign(attrsParams, JSON.parse(JSON.stringify(row)))
+  }
+}
+
+const updateCategoryAllList = (id: number | string) => {
+  if (id) {
+    categoryTableRef.value.categoryAllList =
+      categoryTableRef.value.categoryAllList.filter((item: any) => {
+        return item.id != id
+      })
+  }
 }
 </script>
 

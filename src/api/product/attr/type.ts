@@ -53,3 +53,7 @@ export interface attrsParamsAsgType {
 export interface saveOrUpdateAttrValueResponse extends ResponseData {
   data: null | any
 }
+
+export interface deleteResponseData extends ResponseData {
+  data: null | any
+}
