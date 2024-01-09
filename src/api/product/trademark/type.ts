@@ -39,3 +39,6 @@ export interface ResponseData {
 export interface trademarkUpdateData extends ResponseData {
   data: any
 }
+export interface allTradeMarkListData extends ResponseData {
+  data: TradeMark[]
+}
